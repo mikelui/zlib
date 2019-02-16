@@ -28,11 +28,18 @@ class gzfilebuf : public std::streambuf
 {
 public:
   //  Default constructor.
-  gzfilebuf();
+  gzfilebuf() noexcept;
+
+  //  Move constructor.
+  gzfilebuf(gzfilebuf&& other) noexcept;
 
   //  Destructor.
   virtual
   ~gzfilebuf();
+
+  //  Move assignment.
+  gzfilebuf&
+  operator=(gzfilebuf&& other) noexcept;
 
   /**
    *  @brief  Set compression level and strategy on the fly.
@@ -82,6 +89,12 @@ public:
   */
   gzfilebuf*
   close();
+
+  /**
+   *  @brief  Swap two buffers.
+  */
+  void
+  swap(gzfilebuf& other) noexcept;
 
 protected:
   /**
@@ -178,7 +191,7 @@ private:
    *  case, it will also reset the buffer pointers.
   */
   void
-  disable_buffer();
+  disable_buffer() noexcept;
 
   /**
    *  Underlying file pointer.
@@ -254,6 +267,17 @@ public:
   explicit
   gzifstream(int fd,
              std::ios_base::openmode mode = std::ios_base::in);
+
+  //  Move constructor
+  gzifstream(gzifstream&& other) noexcept;
+
+  //  Move assignment.
+  gzifstream&
+  operator=(gzifstream&& other) noexcept;
+
+  //  Swap streams.
+  void
+  swap(gzifstream& other) noexcept;
 
   /**
    *  Obtain underlying stream buffer.
@@ -343,6 +367,17 @@ public:
   explicit
   gzofstream(int fd,
              std::ios_base::openmode mode = std::ios_base::out);
+
+  //  Move constructor
+  gzofstream(gzofstream&& other) noexcept;
+
+  //  Move assignment.
+  gzofstream&
+  operator=(gzofstream&& other) noexcept;
+
+  //  Swap streams.
+  void
+  swap(gzofstream& other) noexcept;
 
   /**
    *  Obtain underlying stream buffer.
